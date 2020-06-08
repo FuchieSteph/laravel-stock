@@ -43,19 +43,19 @@ trait HasStock
             ->sum('amount');
     }
 
-    public function increaseStock($amount = 1, $arguments = [])
+    public function increaseStock($amount = 1, $date = null, $arguments = [])
     {
-        return $this->createStockMutation($amount, $arguments);
+        return $this->createStockMutation($amount, $date, $arguments);
     }
 
-    public function decreaseStock($amount = 1, $arguments = [])
+    public function decreaseStock($amount = 1, $date = null, $arguments = [])
     {
-        return $this->createStockMutation(-1 * abs($amount), $arguments);
+        return $this->createStockMutation(-1 * abs($amount), $date, $arguments);
     }
 
-    public function mutateStock($amount = 1, $arguments = [])
+    public function decreaseStock($amount = 1, $date = null, $arguments = [])
     {
-        return $this->createStockMutation($amount, $arguments);
+        return $this->createStockMutation($amount, $date, $arguments);
     }
 
     public function clearStock($newAmount = null, $arguments = [])
@@ -95,12 +95,13 @@ trait HasStock
      * @param  array  $arguments
      * @return bool
      */
-    protected function createStockMutation($amount, $arguments = [])
+    protected function createStockMutation($amount, $date, $arguments = [])
     {
         $reference = Arr::get($arguments, 'reference');
 
         $createArguments = collect([
             'amount' => $amount,
+            'created_at' => isset($date) ? $date : Carbon::now(),
             'description' => Arr::get($arguments, 'description'),
         ])->when($reference, function ($collection) use ($reference) {
             return $collection
