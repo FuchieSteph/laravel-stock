@@ -53,7 +53,7 @@ trait HasStock
         return $this->createStockMutation(-1 * abs($amount), $date, $arguments);
     }
 
-    public function decreaseStock($amount = 1, $date = null, $arguments = [])
+    public function mutateStock($amount = 1, $date = null, $arguments = [])
     {
         return $this->createStockMutation($amount, $date, $arguments);
     }
